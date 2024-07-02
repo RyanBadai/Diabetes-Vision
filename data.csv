@@ -1,0 +1,51 @@
+Nama Makanan,Karbo,Gula,Lemak,Protein,Serat,Kolesterol,Sodium,Direkomendasikan (Ya/Tidak)
+nasi goreng,21.06,0.76,6.23,6.3,0.7,52,415,Tidak
+mie goreng,52,6,12,8,2,0,680,Tidak
+soto ayam,8.11,0.41,6.19,9.96,0.7,53,87,Ya
+bakso,7.58,1.51,13.16,12.41,7.58,21,134,Tidak
+nasi campur,27.9,0.05,0.28,2.66,0.4,0,365,Ya
+ayam goreng,10.76,0.26,14.55,21.93,1.4,57,350,Ya
+gado-gado,10.9,1.84,7.41,7.14,2.9,78,126,Ya
+rendang,4.49,1.31,11.07,19.68,4.49,29,184,Tidak
+nasi padang,70,0.05,15,70,0.4,0,228,Tidak
+nasi uduk,20.52,1.14,8.09,2.54,1,0,198,Tidak
+nasi kuning,20.86,0.39,0.17,1.89,0.4,0,550,Ya
+sate ayam,4.87,1.99,14.82,19.54,4.87,49,355,Tidak
+sate kambing,4.81,1.97,14.06,18.93,1.8,40,359,Tidak
+nasi pecel,31.74,9.56,9.33,6.58,2,0,8,Ya
+nasi krawu,32.24,1.68,,,,,,Tidak
+pempek,23.58,9.32,5.2,12.61,0.7,,,Tidak
+mie ayam,19.25,0.55,7.81,6.96,1,,,Tidak
+nasi liwet,25.94,0.51,2.72,2.74,1.2,,,Ya
+nasi jagung,26.14,0.64,3.99,2.67,0.8,,,Ya
+sambal goreng ati,10.15,1.25,,,,,,Tidak
+gulai ayam,3.33,0.16,12.4,11.94,0.9,,,Tidak
+gulai kambing,6.44,3.1,9.6,4.71,1,,,Tidak
+pepes ayam,1.33,0.07,12.25,21.92,0.5,,,Tidak
+sayur asem,5.38,1.98,1.15,1.32,1,,,Iya
+tahu goreng,10.49,2.72,20.18,17.19,3.9,,,Iya
+tempe goreng,1.79,0.03,13,15,2,,,Tidak
+ikan bakar,0.33,0.08,20,3,0,,,Tidak
+sayur lodeh,14.73,4.23,2,5,1.5,,,Iya
+rawon,3.48,0.45,8,7,1,,,Tidak
+mie rebus / mie kuah,43,3,4,3,1,,,Tidak
+sayur bening bayam,3.2,1.5,2.5,0.5,2.1,,,Ya
+sambal terasi,12,5.4,1.5,5,1.2,,,Tidak
+ayam kecap,8,4.5,15,10,1,,,Tidak
+capcay,7,2.5,4,2,2,,,Ya
+opor ayam,4,1.5,12,10,0.5,,,Ya
+sambal matah,6,2,1,6,0.8,,,Ya
+sayur sop ayam,2.5,1,7,4,1.5,,,Ya
+sayur bayam,3.6,1.2,2.5,0.5,2.1,,,Ya
+lontong sayur,16,4,3,2,1,,,Tidak
+sambal goreng kentang,20,6,2,10,1,,,Tidak
+perkedel kentang,16.52,0.83,5,10,2,,,
+udang goreng,27.57,0.91,20,5,0,,,
+oseng-oseng mercon,10.67,1.33,7,10,1.5,,,
+sayur nangka muda,8.7,,1.5,1,2.5,,,
+nasi goreng jawa,21.06,0.76,5,10,1.5,,,
+tongseng kambing,,,10,15,0.5,,,
+tongseng ayam,,,12,10,0.5,,,
+cah kangkung,3.99,0.51,2.5,1,2.5,,,
+ayam rica-rica,3.71,0.34,15,10,0.5,,,
+soto betawi,11.44,1.43,8,7,1,,,
