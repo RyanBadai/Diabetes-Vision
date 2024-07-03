@@ -130,45 +130,6 @@ def create_gauge(score):
 
     return fig
 
-st.write("## Perhitungan Skor Gula Darah")
-
-# Input fields
-gender = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"], index=None)
-weight = st.number_input("Berat Badan (kg)", min_value=1)
-height = st.number_input("Tinggi Badan (cm)", min_value=1)
-age = st.number_input("Usia (tahun)", min_value=1)
-waist_circumference = st.number_input("Lingkar Pinggang (cm)", min_value=1)
-
-family_history = {
-    'parent_sibling_child': st.radio("Riwayat Keluarga (Orang Tua/Saudara/Keturunan)", ["Ya", "Tidak"], index=None),
-    'grandparent_uncle_aunt_cousin': st.radio("Riwayat Keluarga (Kakek/Nenek/Paman/Bibi/Sepupu)", ["Ya", "Tidak"], index=None),
-    'high_blood_sugar': st.radio("Riwayat Gula Darah Tinggi", ["Ya", "Tidak"], index=None),
-    'hypertension_meds': st.radio("Mengonsumsi Obat Hipertensi", ["Ya", "Tidak"], index=None)
-}
-
-lifestyle = {
-    'exercise': st.radio("Apakah Anda Berolahraga?", ["Ya", "Tidak"], index=None),
-    'fruits_veggies': st.radio("Apakah Anda Mengonsumsi Buah dan Sayuran?", ["Ya", "Tidak"], index=None)
-}
-
-if st.button("Hasil"):
-    score = calculate_score(gender, weight, height, age, waist_circumference, family_history, lifestyle)
-    if score < 7:
-        st.success("Risiko Rendah Diabetes. Diperkirakan 1 dari 100 orang akan mengidap Diabetes")
-    elif score <= 11:
-        st.success("Risiko Sedikit Tinggi Diabetes. Diperkirakan 1 dari 25 orang akan mengidap Diabetes")
-    elif score <= 14:
-        st.success("Risiko Sedang/Moderat Diabetes. Diperkirakan 1 dari 6 orang akan mengidap Diabetes")
-    elif score <= 20:
-        st.success("Risiko Tinggi Diabetes. Diperkirakan 1 dari 3 orang akan mengidap Diabetes")
-    else:
-        st.success("Risiko Sangat Tinggi Diabetes. Diperkirakan 1 dari 2 orang akan mengidap Diabetes")
-    
-    fig = create_gauge(score)
-    st.plotly_chart(fig)
-
-
-
 # Set your Custom Vision Prediction API details
 prediction_key = "9f3b60cb7bd94a52a521b1687039efc5"
 endpoint = "https://customvisionwebcastss-prediction.cognitiveservices.azure.com/customvision/v3.0/Prediction/a2754bc9-cf96-43b6-ba20-3550965f05a8/classify/iterations/Iteration3/image"
@@ -195,8 +156,50 @@ def get_nutrition_info(food_name, csv_file):
     else:
         return None
 
-def main():
-    st.write("## Klasifikasi Makanan")
+st.write(" ")
+tabs = st.tabs(["Diabetes Risk Analysis", "Food Classification  "])
+
+with tabs[0]:
+    # st.write("## Perhitungan Skor Gula Darah")
+
+    # Input fields
+    gender = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"], index=None)
+    weight = st.number_input("Berat Badan (kg)", min_value=1)
+    height = st.number_input("Tinggi Badan (cm)", min_value=1)
+    age = st.number_input("Usia (tahun)", min_value=1)
+    waist_circumference = st.number_input("Lingkar Pinggang (cm)", min_value=1)
+
+    family_history = {
+        'parent_sibling_child': st.radio("Riwayat Keluarga (Orang Tua/Saudara/Keturunan)", ["Ya", "Tidak"], index=None),
+        'grandparent_uncle_aunt_cousin': st.radio("Riwayat Keluarga (Kakek/Nenek/Paman/Bibi/Sepupu)", ["Ya", "Tidak"], index=None),
+        'high_blood_sugar': st.radio("Riwayat Gula Darah Tinggi", ["Ya", "Tidak"], index=None),
+        'hypertension_meds': st.radio("Mengonsumsi Obat Hipertensi", ["Ya", "Tidak"], index=None)
+    }
+
+    lifestyle = {
+        'exercise': st.radio("Apakah Anda Berolahraga?", ["Ya", "Tidak"], index=None),
+        'fruits_veggies': st.radio("Apakah Anda Mengonsumsi Buah dan Sayuran?", ["Ya", "Tidak"], index=None)
+    }
+
+    if st.button("Hasil"):
+        score = calculate_score(gender, weight, height, age, waist_circumference, family_history, lifestyle)
+    
+        if score < 7:
+            st.success("Risiko Rendah Diabetes. Diperkirakan 1 dari 100 orang akan mengidap Diabetes")
+        elif score <= 11:
+            st.success("Risiko Sedikit Tinggi Diabetes. Diperkirakan 1 dari 25 orang akan mengidap Diabetes")
+        elif score <= 14:
+            st.success("Risiko Sedang/Moderat Diabetes. Diperkirakan 1 dari 6 orang akan mengidap Diabetes")
+        elif score <= 20:
+            st.success("Risiko Tinggi Diabetes. Diperkirakan 1 dari 3 orang akan mengidap Diabetes")
+        else:
+            st.success("Risiko Sangat Tinggi Diabetes. Diperkirakan 1 dari 2 orang akan mengidap Diabetes")
+        
+        fig = create_gauge(score)
+        st.plotly_chart(fig)
+
+with tabs[1]:
+    # st.write("## Klasifikasi Makanan")
 
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
@@ -239,5 +242,3 @@ def main():
             else:
                 st.write("No nutrition information found for this food item.")
 
-if __name__ == "__main__":
-    main()
