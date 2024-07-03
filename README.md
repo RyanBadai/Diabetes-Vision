@@ -1,0 +1,2 @@
+# Diabetes Vision
+Diabetes Vision menyediakan tools analisis risiko diabetes yang ​komprehensif. Kami mengarahkan pengguna untuk mengunggah ​foto makanan yang dikonsumsi, dan situs kami akan mendeteksi ​kandungan karbohidrat dan gula serta informasi lain dari foto ​makanan yang diunggah. Sehingga kami dapat merekomendasikan ​apakah makanan tersebut cocok untuk pengguna berdasarkan ​analisis risiko yang telah dilakukan.
