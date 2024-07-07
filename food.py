@@ -7,7 +7,7 @@ from PIL import Image
 
 st.title("Diabetes Vision")
 
-st.write(f'<div style="text-align: justify;">Diabetes Vision menyediakan tools analisis risiko diabetes yang ​komprehensif. Kami mengarahkan pengguna untuk mengunggah ​foto makanan yang dikonsumsi, dan situs kami akan mendeteksi ​kandungan karbohidrat dan gula serta informasi lain dari foto ​makanan yang diunggah. Sehingga kami dapat merekomendasikan ​apakah makanan tersebut cocok untuk pengguna berdasarkan ​analisis risiko yang telah dilakukan.</div>', unsafe_allow_html=True)
+st.write(f'<div style="text-align: justify;">Diabetes Vision provides a comprehensive diabetes risk analysis tool. We direct users to upload photos of the food they consume, and our site will detect the carbohydrate and sugar content and other nutritional values of the uploaded food photos. This information becomes our reference to recommend whether the food is suitable or not for the user based on the risk analysis that has been done.</div>', unsafe_allow_html=True)
 
 def calculate_score(gender, weight, height, age, waist_circumference, family_history, lifestyle):
     # BMI calculation
@@ -63,20 +63,20 @@ def calculate_score(gender, weight, height, age, waist_circumference, family_his
 
     # Family history score
     family_history_score = 0
-    if family_history['parent_sibling_child'] == 'Ya':
+    if family_history['parent_sibling_child'] == 'Yes':
         family_history_score += 5
-    if family_history['grandparent_uncle_aunt_cousin'] == 'Ya':
+    if family_history['grandparent_uncle_aunt_cousin'] == 'Yes':
         family_history_score += 3
-    if family_history['high_blood_sugar'] == 'Ya':
+    if family_history['high_blood_sugar'] == 'Yes':
         family_history_score += 5
-    if family_history['hypertension_meds'] == 'Ya':
+    if family_history['hypertension_meds'] == 'Yes':
         family_history_score += 2
 
     # Lifestyle score
     lifestyle_score = 0
-    if lifestyle['exercise'] == 'Tidak':
+    if lifestyle['exercise'] == 'No':
         lifestyle_score += 2
-    if lifestyle['fruits_veggies'] == 'Tidak':
+    if lifestyle['fruits_veggies'] == 'No':
         lifestyle_score += 1
 
     # Total score
@@ -85,27 +85,26 @@ def calculate_score(gender, weight, height, age, waist_circumference, family_his
     return total_score
 
 def create_gauge(score):
-    # Menentukan warna dan pembagian risiko
     if score < 7:
         color = "green"
-        risk_category = "Risiko Rendah"
+        risk_category = "Low Risk"
     elif score <= 11:
         color = "yellow"
-        risk_category = "Risiko Sedikit Tinggi"
+        risk_category = "Slightly High Risk"
     elif score <= 14:
         color = "orange"
-        risk_category = "Risiko Sedang/Moderat"
+        risk_category = "Moderate Risk"
     elif score <= 20:
         color = "red"
-        risk_category = "Risiko Tinggi"
+        risk_category = "High Risk"
     else:
         color = "darkred"
-        risk_category = "Risiko Sangat Tinggi"
+        risk_category = "Very High Risk"
 
     fig = go.Figure(go.Indicator(
         mode = "gauge+number",
         value = score,
-        title = {'text': "Skor Gula Darah"},
+        title = {'text': "Blood Sugar Score"},
         gauge = {
             'axis': {'range': [0, 20]},
             'bar': {'color': color},
@@ -131,8 +130,8 @@ def create_gauge(score):
     return fig
 
 # Set your Custom Vision Prediction API details
-prediction_key = "9f3b60cb7bd94a52a521b1687039efc5"
-endpoint = "https://customvisionwebcastss-prediction.cognitiveservices.azure.com/customvision/v3.0/Prediction/a2754bc9-cf96-43b6-ba20-3550965f05a8/classify/iterations/Iteration3/image"
+prediction_key = "096897960d4e4e3a86c7f6b811289f9e"
+endpoint = "https://klp15diabetesvision-prediction.cognitiveservices.azure.com/customvision/v3.0/Prediction/dbf255ce-4d3a-4db9-827b-41648e82f521/classify/iterations/Model%20Terbaik%20(Diabetes%20Vision)/image"
 
 def predict_image(image):
     headers = {
@@ -163,37 +162,37 @@ with tabs[0]:
     # st.write("## Perhitungan Skor Gula Darah")
 
     # Input fields
-    gender = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"], index=None)
-    weight = st.number_input("Berat Badan (kg)", min_value=1)
-    height = st.number_input("Tinggi Badan (cm)", min_value=1)
-    age = st.number_input("Usia (tahun)", min_value=1)
-    waist_circumference = st.number_input("Lingkar Pinggang (cm)", min_value=1)
+    gender = st.selectbox("Gender / Jenis Kelamin", ["Male", "Female"], index=None)
+    weight = st.number_input("Weight / Berat Badan (kg)", min_value=1)
+    height = st.number_input("Height / Tinggi Badan (cm)", min_value=1)
+    age = st.number_input("Age / Usia (Years / Tahun)", min_value=1)
+    waist_circumference = st.number_input("Waistline / Lingkar Pinggang (cm)", min_value=1)
 
     family_history = {
-        'parent_sibling_child': st.radio("Riwayat Keluarga (Orang Tua/Saudara/Keturunan)", ["Ya", "Tidak"], index=None),
-        'grandparent_uncle_aunt_cousin': st.radio("Riwayat Keluarga (Kakek/Nenek/Paman/Bibi/Sepupu)", ["Ya", "Tidak"], index=None),
-        'high_blood_sugar': st.radio("Riwayat Gula Darah Tinggi", ["Ya", "Tidak"], index=None),
-        'hypertension_meds': st.radio("Mengonsumsi Obat Hipertensi", ["Ya", "Tidak"], index=None)
+        'parent_sibling_child': st.radio("Have your parents, siblings, or children ever been diagnosed with diabetes / Apakah orang tua, saudara kandung, atau anak kandung pernah didiagnosis Diabetes?", ["Yes", "No"], index=None),
+        'grandparent_uncle_aunt_cousin': st.radio("Have your grandparents, uncles, aunts, or first cousins ever been diagnosed with diabetes / Apakah kakek, bibi, paman, atau sepupu pertama pernah didiagnosis Diabetes ?", ["Yes", "No"], index=None),
+        'high_blood_sugar': st.radio("Have you ever had high blood sugar levels / Apakah kamu pernah memiliki kadar gula darah yang tinggi?", ["Yes", "No"], index=None),
+        'hypertension_meds': st.radio("Have you ever taken medication for high blood pressure / Apakah kamu pernah mengkonsumsi obat darah tinggi?", ["Yes", "No"], index=None)
     }
 
     lifestyle = {
-        'exercise': st.radio("Apakah Anda Berolahraga?", ["Ya", "Tidak"], index=None),
-        'fruits_veggies': st.radio("Apakah Anda Mengonsumsi Buah dan Sayuran?", ["Ya", "Tidak"], index=None)
+        'exercise': st.radio("Do you exercise for more than 30 minutes every day / Apakah kamu berolahraga selama lebih dari 30 menit setiap hari?", ["Yes", "No"], index=None),
+        'fruits_veggies': st.radio("Do you consume fruits and vegetables every day / Apakah Anda Mengonsumsi Buah dan Sayuran setiap hari?", ["Yes", "No"], index=None)
     }
 
-    if st.button("Hasil"):
+    if st.button("Result"):
         score = calculate_score(gender, weight, height, age, waist_circumference, family_history, lifestyle)
     
         if score < 7:
-            st.success("Risiko Rendah Diabetes. Diperkirakan 1 dari 100 orang akan mengidap Diabetes")
+            st.success("Low Risk of Diabetes. An estimated 1 in 100 people will develop diabetes")
         elif score <= 11:
-            st.success("Risiko Sedikit Tinggi Diabetes. Diperkirakan 1 dari 25 orang akan mengidap Diabetes")
+            st.success("Slightly High Risk of Diabetes. It is estimated that 1 in 25 people will have diabetes")
         elif score <= 14:
-            st.success("Risiko Sedang/Moderat Diabetes. Diperkirakan 1 dari 6 orang akan mengidap Diabetes")
+            st.success("Moderate Risk of Diabetes. It is estimated that 1 in 6 people will have Diabetes")
         elif score <= 20:
-            st.success("Risiko Tinggi Diabetes. Diperkirakan 1 dari 3 orang akan mengidap Diabetes")
+            st.success("High Risk of Diabetes. It is estimated that 1 in 3 people will have Diabetes")
         else:
-            st.success("Risiko Sangat Tinggi Diabetes. Diperkirakan 1 dari 2 orang akan mengidap Diabetes")
+            st.success("Very High Risk of Diabetes. It is estimated that 1 in 2 people will have Diabetes")
         
         fig = create_gauge(score)
         st.plotly_chart(fig)
@@ -217,16 +216,16 @@ with tabs[1]:
             # Get the top prediction
             top_prediction = max(prediction["predictions"], key=lambda x: x['probability'])
             food_name = top_prediction['tagName'].capitalize()
-            st.write(f"Hasil = {food_name}")
+            st.write(f"Result = {food_name}")
         
             # Get nutrition information
             nutrition_info = get_nutrition_info(top_prediction['tagName'], 'data.csv')
             
             if nutrition_info is not None:
-                st.write("Tabel Nutrisi:")
+                st.write("Nutrition Table:")
                 nutrition_data = {
-                    "Nutrisi": ["Karbo", "Gula", "Lemak", "Protein", "Serat", "Kolesterol", "Sodium", "Direkomendasikan (Ya/Tidak)"],
-                    "Nilai": [
+                    "Nutrition": ["Karbo", "Gula", "Lemak", "Protein", "Serat", "Kolesterol", "Sodium", "Recommended (Yes/No)"],
+                    "Value": [
                         round(nutrition_info['Karbo'], 2),
                         round(nutrition_info['Gula'], 2),
                         round(nutrition_info['Lemak'], 2),
@@ -234,7 +233,7 @@ with tabs[1]:
                         round(nutrition_info['Serat'], 2),
                         round(nutrition_info['Kolesterol'], 2),
                         round(nutrition_info['Sodium'], 2),
-                        nutrition_info['Direkomendasikan (Ya/Tidak)']
+                        nutrition_info['Recommended (Yes/No)']
                     ]
                 }
                 df_nutrition = pd.DataFrame(nutrition_data)
