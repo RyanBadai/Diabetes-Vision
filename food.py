@@ -6,6 +6,7 @@ import requests
 import plotly.graph_objects as go
 from PIL import Image
 import tensorflow as tf
+import keras
 
 def food_app():
     st.title("Diabetes Vision")
