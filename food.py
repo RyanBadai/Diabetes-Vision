@@ -137,8 +137,7 @@ def food_app():
         tf.keras.models.load_model('model/keras_model_1.h5'),
         tf.keras.models.load_model('model/keras_model_2.h5'),
         tf.keras.models.load_model('model/keras_model_3.h5'),
-        tf.keras.models.load_model('model/keras_model_4.h5')
-    ]
+        tf.keras.models.load_model('model/keras_model_4.h5')]
 
     # Load labels from labels.txt
     labels_list = []
