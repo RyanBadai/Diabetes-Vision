@@ -328,8 +328,17 @@ def food_app():
                 if nutrition_info is not None:
                     st.write("Nutrition Table:")
                     nutrition_data = {
-                        "Nutrition": list(nutrition_info.keys()),
-                        "Value": list(nutrition_info.values())
+                        "Nutrition": ["Karbo", "Gula", "Lemak", "Protein", "Serat", "Kolesterol", "Sodium", "Recommended (Yes/No)"],
+                        "Value": [
+                            round(nutrition_info.get('Karbo', 0), 2),
+                            round(nutrition_info.get('Gula', 0), 2),
+                            round(nutrition_info.get('Lemak', 0), 2),
+                            round(nutrition_info.get('Protein', 0), 2),
+                            round(nutrition_info.get('Serat', 0), 2),
+                            round(nutrition_info.get('Kolesterol', 0), 2),
+                            round(nutrition_info.get('Sodium', 0), 2),
+                            nutrition_info.get('Recommended (Yes/No)', 'No')
+                        ]
                     }
                     df_nutrition = pd.DataFrame(nutrition_data)
                     st.dataframe(df_nutrition.set_index("Nutrition"), use_container_width=True)
