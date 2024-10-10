@@ -224,6 +224,7 @@ def food_app():
         try:
             df = pd.read_csv(csv_path)
             nutrition_info = df[df['Food'].str.lower() == class_name.lower()]
+            nutrition_info = nutrition_info_cleaned = {k: v for k, v in nutrition_info.items() if isinstance(v, (int, float, str))}
             return nutrition_info
         except Exception as e:
             st.error(f"Error loading nutrition data: {e}")
