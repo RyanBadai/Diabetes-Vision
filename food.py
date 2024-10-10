@@ -224,8 +224,8 @@ def food_app():
         try:
             df = pd.read_csv(csv_path)
             nutrition_info = df[df['Food'].str.lower() == class_name.lower()]
-            nutrition_info = nutrition_info_cleaned = {k: v for k, v in nutrition_info.items() if isinstance(v, (int, float, str))}
-            return nutrition_info
+            nutrition_info_cleaned = {k: v for k, v in nutrition_info.items() if isinstance(v, (int, float, str))}
+            return nutrition_info_cleaned
         except Exception as e:
             st.error(f"Error loading nutrition data: {e}")
             return None
@@ -328,20 +328,11 @@ def food_app():
                 if nutrition_info is not None:
                     st.write("Nutrition Table:")
                     nutrition_data = {
-                        "Nutrition": ["Karbo", "Gula", "Lemak", "Protein", "Serat", "Kolesterol", "Sodium", "Recommended (Yes/No)"],
-                        "Value": [
-                            round(nutrition_info['Karbo'], 2),
-                            round(nutrition_info['Gula'], 2),
-                            round(nutrition_info['Lemak'], 2),
-                            round(nutrition_info['Protein'], 2),
-                            round(nutrition_info['Serat'], 2),
-                            round(nutrition_info['Kolesterol'], 2),
-                            round(nutrition_info['Sodium'], 2),
-                            nutrition_info['Recommended (Yes/No)']
-                        ]
+                        "Nutrition": list(nutrition_info.keys()),
+                        "Value": list(nutrition_info.values())
                     }
                     df_nutrition = pd.DataFrame(nutrition_data)
-                    st.dataframe(df_nutrition.set_index(df_nutrition.columns[0]), use_container_width=True)
+                    st.dataframe(df_nutrition.set_index("Nutrition"), use_container_width=True)
                 else:
                     st.write("No nutrition information found for this food item.")
             else:
