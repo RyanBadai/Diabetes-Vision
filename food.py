@@ -319,7 +319,7 @@ def food_app():
 
             if model is not None:
                 prediction_label, probability = predict_image(model, image, class_names)
-                st.write(f"Result = {prediction_label[2:]}")  # Strip first two characters if needed
+                st.write(f"Result = {prediction_label}")  # Strip first two characters if needed
                 st.write(f"Confidence = {probability:.2f}")
 
                 # Get nutrition information
