@@ -1,12 +1,15 @@
 import io
+import sys
 import pandas as pd
 import numpy as np
 import streamlit as st
 import requests
 import plotly.graph_objects as go
-from PIL import Image
+from PIL import Image, ImageOps
 import tensorflow as tf
 import keras
+import h5py
+from keras.models import load_model
 
 def food_app():
     st.title("Diabetes Vision")
@@ -133,56 +136,132 @@ def food_app():
 
         return fig
 
+    # f_1 = h5py.File("model/keras_model_1.h5", mode="r+")
+    # model_config_string = f_1.attrs.get("model_config")
+    # if model_config_string.find('"groups": 1,') != -1:
+    #     model_config_string = model_config_string.replace('"groups": 1,', '')
+    #     f_1.attrs.modify('model_config', model_config_string)
+    #     f_1.flush()
+    #     model_config_string = f_1.attrs.get("model_config")
+    #     assert model_config_string.find('"groups": 1,') == -1
+    
+    # f_2 = h5py.File("model/keras_model_2.h5", mode="r+")
+    # model_config_string = f_2.attrs.get("model_config")
+    # if model_config_string.find('"groups": 1,') != -1:
+    #     model_config_string = model_config_string.replace('"groups": 1,', '')
+    #     f_2.attrs.modify('model_config', model_config_string)
+    #     f_2.flush()
+    #     model_config_string = f_2.attrs.get("model_config")
+    #     assert model_config_string.find('"groups": 1,') == -1
+    
+    # f_3 = h5py.File("model/keras_model_3.h5", mode="r+")
+    # model_config_string = f_3.attrs.get("model_config")
+    # if model_config_string.find('"groups": 1,') != -1:
+    #     model_config_string = model_config_string.replace('"groups": 1,', '')
+    #     f_3.attrs.modify('model_config', model_config_string)
+    #     f_3.flush()
+    #     model_config_string = f_3.attrs.get("model_config")
+    #     assert model_config_string.find('"groups": 1,') == -1
+    
+    # f_4 = h5py.File("model/keras_model_4.h5", mode="r+")
+    # model_config_string = f_4.attrs.get("model_config")
+    # if model_config_string.find('"groups": 1,') != -1:
+    #     model_config_string = model_config_string.replace('"groups": 1,', '')
+    #     f_4.attrs.modify('model_config', model_config_string)
+    #     f_4.flush()
+    #     model_config_string = f_4.attrs.get("model_config")
+    #     assert model_config_string.find('"groups": 1,') == -1
+
     # Load the model
-    models = [
-        tf.keras.models.load_model('model/keras_model_1.h5'),
-        tf.keras.models.load_model('model/keras_model_2.h5'),
-        tf.keras.models.load_model('model/keras_model_3.h5'),
-        tf.keras.models.load_model('model/keras_model_4.h5')]
+    # models = [
+    #     tf.keras.models.load_model('model/keras_model_1.h5'),
+    #     tf.keras.models.load_model('model/keras_model_2.h5'),
+    #     tf.keras.models.load_model('model/keras_model_3.h5'),
+    #     tf.keras.models.load_model('model/keras_model_4.h5')
+    #     ]
 
     # Load labels from labels.txt
-    labels_list = []
-    for i in range(1, 5):
-        with open(f'model/labels_{i}.txt', 'r') as f:
-            labels = [line.strip() for line in f.readlines()]
-            labels_list.append(labels)
+    # labels_list = []
+    # for i in range(1, 5):
+    #     with open(f'model/labels_{i}.txt', 'r') as f:
+    #         labels = [line.strip() for line in f.readlines()]
+    #         labels_list.append(labels)
 
-    def preprocess_image(image, target_size):
-        # Resize image to target size
-        image = image.resize(target_size)
-        # Convert image to array
-        image_array = np.array(image)
-        # Scale the pixel values (normalizing if necessary)
-        image_array = image_array / 255.0
-        # Expand dimensions to match model input shape (batch size)
-        image_array = np.expand_dims(image_array, axis=0)
-        return image_array
+    # Disable scientific notation for clarity
+    np.set_printoptions(suppress=True)
 
-    def predict_image(image):
-        processed_image = preprocess_image(image, target_size=(224, 224))  # Assuming 224x224 input for the models
-        
-        predictions_combined = []
-        for model in models:
-            predictions_combined.append(model.predict(processed_image))
+    # Load the model and labels
+    @st.cache_resource
+    def load_model_and_labels():
+        try:
+            model = load_model('model/keras_model_1.h5')  # Adjust path as needed
+            with open('model/labels_1.txt', 'r', encoding='utf-8') as f:
+                labels = [line.strip() for line in f.readlines()]
+            return model, labels
+        except Exception as e:
+            st.error(f"Error loading model or labels: {e}")
+            return None, []
 
-        top_predictions = []
-        for i, predictions in enumerate(predictions_combined):
-            top_prediction_index = np.argmax(predictions[0])
-            predicted_label = labels_list[i][top_prediction_index]
-            probability = predictions[0][top_prediction_index]
-            top_predictions.append((predicted_label, probability))
-        
-        # Find the model with the highest probability
-        best_prediction = max(top_predictions, key=lambda x: x[1])
-        return best_prediction
+    # Preprocess the image
+    def preprocess_image(image):
+        size = (224, 224)
+        image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
+        image_array = np.asarray(image)
+        normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
+        return np.expand_dims(normalized_image_array, axis=0)  # Add batch dimension
 
-    def get_nutrition_info(food_name, csv_file):
-        df = pd.read_csv(csv_file)
-        food_info = df[df['Nama Makanan'].str.lower() == food_name.lower()]
-        if not food_info.empty:
-            return food_info.iloc[0]
-        else:
+    # Predict the class of the image
+    def predict_image(model, image, class_names):
+        data = preprocess_image(image)
+        prediction = model.predict(data)
+        index = np.argmax(prediction)
+        class_name = class_names[index].encode('utf-8').decode('utf-8')  # Ensure correct encoding
+        confidence_score = prediction[0][index]
+        return class_name, confidence_score
+
+    # Function to get nutrition information from a CSV file
+    def get_nutrition_info(class_name, csv_path):
+        try:
+            df = pd.read_csv(csv_path)
+            nutrition_info = df[df['Food'].str.lower() == class_name.lower()]
+            return nutrition_info
+        except Exception as e:
+            st.error(f"Error loading nutrition data: {e}")
             return None
+
+    # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    # sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
+    # def predict_image(image):
+    #     # Preprocess the image
+    #     processed_image = preprocess_image(image, target_size=(224, 224))  # Assuming 224x224 input for the models
+        
+    #     predictions_combined = []
+    #     for model in models:
+    #         predictions_combined.append(model.predict(processed_image))
+
+    #     top_predictions = []
+    #     for i, predictions in enumerate(predictions_combined):
+    #         # Get the index of the top prediction
+    #         top_prediction_index = np.argmax(predictions[0])
+            
+    #         # Retrieve the predicted label and probability
+    #         predicted_label = labels_list[i][top_prediction_index]
+            
+    #         # Encode the predicted label to handle special characters
+    #         predicted_label = predicted_label.encode('utf-8', errors='ignore').decode('utf-8')
+            
+    #         # Get the probability of the predicted class
+    #         probability = predictions[0][top_prediction_index]
+            
+    #         # Store the label and its associated probability
+    #         top_predictions.append((predicted_label, probability))
+        
+    #     # Find the model with the highest probability
+    #     best_prediction = max(top_predictions, key=lambda x: x[1])
+        
+    #     return best_prediction
+    
 
     st.write(" ")
     tabs = st.tabs(["Diabetes Risk Analysis", "Food Classification  "])
@@ -227,21 +306,24 @@ def food_app():
             st.plotly_chart(fig)
 
     with tabs[1]:
+        # Load model and labels
+        model, class_names = load_model_and_labels()
+
+        # Image upload
         uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
         if uploaded_file is not None:
-            image = Image.open(uploaded_file)
+            image = Image.open(uploaded_file).convert("RGB")
             st.image(image, caption="Uploaded Image", use_column_width=True)
 
-            prediction_label, probability = predict_image(image)
-
-            if prediction_label:
-                st.write(f"Result = {prediction_label}")
+            if model is not None:
+                prediction_label, probability = predict_image(model, image, class_names)
+                st.write(f"Result = {prediction_label[2:]}")  # Strip first two characters if needed
                 st.write(f"Confidence = {probability:.2f}")
 
                 # Get nutrition information
-                nutrition_info = get_nutrition_info(prediction_label, 'dataset/data.csv')
-                
+                nutrition_info = get_nutrition_info(prediction_label, 'dataset/data.csv')  # Adjust path if needed
+
                 if nutrition_info is not None:
                     st.write("Nutrition Table:")
                     nutrition_data = {
@@ -261,5 +343,7 @@ def food_app():
                     st.dataframe(df_nutrition.set_index(df_nutrition.columns[0]), use_container_width=True)
                 else:
                     st.write("No nutrition information found for this food item.")
+            else:
+                st.error("Model could not be loaded.")
 
 

@@ -1,4 +1,4 @@
-Nama Makanan,Karbo,Gula,Lemak,Protein,Serat,Kolesterol,Sodium,Recommended (Yes/No)
+Food,Karbo,Gula,Lemak,Protein,Serat,Kolesterol,Sodium,Recommended (Yes/No)
 Mie Goreng,52,6,12,8,2,0,680,Not Recommended
 Soto Ayam,8.11,0.41,6.19,9.96,0.7,53,87,Recommended
 Bakso,7.58,1.51,13.16,12.41,7.58,21,134,Not Recommended
